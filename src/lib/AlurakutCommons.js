@@ -222,7 +222,7 @@ export function AlurakutProfileSidebarMenuDefault() {
 AlurakutProfileSidebarMenuDefault.Wrapper = styled.div`
   a {
     font-size: 12px;
-    color: ##44140D;
+    color: #ffffff;
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -473,6 +473,7 @@ export const AlurakutStyles = css`
   a,
   button {
     cursor: pointer;
+    color:  #ffffff;
     transition: .3s;
     outline: 0;
     &:hover,

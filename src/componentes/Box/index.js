@@ -38,8 +38,8 @@ const Box = styled.div`
   }
   input {
     width: 100%;
-    background-color: #F4F4F4;
-    color: #333333;
+    background-color: #A49A99;
+    color: #000000;
     border: 0;
     padding: 14px 16px;
     margin-bottom: 14px;
@@ -52,9 +52,10 @@ const Box = styled.div`
   button {
     border: 0;
     padding: 8px 12px;
-    color: #FFFFFF;
+    color: #000000;
     border-radius: 10000px;
-    background-color: #6F92BB;
+    background-color: #A49A99;
+    border: 2px solid #ffffff
   }
 `; 
 

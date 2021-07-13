@@ -15,6 +15,10 @@ const GlobalStyle = createGlobalStyle`
     background-color: #898180;
   }
 
+  h2{
+    color:#ffffff;
+  }
+
   #__next {
     display: flex;
     min-height: 100vh;
