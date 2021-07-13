@@ -6,7 +6,6 @@ import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault 
 import { ProfileRelationsBoxWrapper } from "../src/componentes/profileRelations";
 
 
-
 function ProfileSideBar (propriedades) {
   return (
     <Box as="aside">        
@@ -24,6 +23,29 @@ function ProfileSideBar (propriedades) {
   )
 }
 
+function CommunityBox ({ titleText, stateArray }) {
+  return (
+    <ProfileRelationsBoxWrapper>
+    <h2 className="smallTitle">
+      {titleText} ({stateArray.length})
+    </h2>
+    <ul>
+      {stateArray.map((itemAtual) => {
+        return(
+          <li key={itemAtual.id}>
+            <a href={`/users/${itemAtual.title}`}>
+              <img src={itemAtual.image}/>
+              <span> {itemAtual.title} </span>
+            </a>
+          </li>
+        )          
+      })}
+    </ul>
+</ProfileRelationsBoxWrapper>
+  )
+}
+
+
 export default function Home() {   
   const githubUser = "pedrohenriquebl";  
   const [comunidades, setComunidades] = React.useState([{
@@ -34,23 +56,69 @@ export default function Home() {
     id: '4545454542',
     title: 'Colera do Dragão no banheiro',
     image: 'https://i.ibb.co/y0dtb5R/coleradodragao.png',
+    },
+    {
+      id: '454454545',
+      title: 'Cachoeiras e natureza',
+      image: 'https://i.ibb.co/99sdKqz/cachoeiras.jpg',
+    },
+    {
+      id: '9898151',
+      title: 'Piano e música',
+      image: 'https://i.ibb.co/Mh6cr4x/Piano-and-piano-keyboard.jpg',
+    },
+    {
+      id: '787451',
+      title: 'Alura',
+      image: 'https://i.ibb.co/nw1cQkt/alura.jpg',  
   }]); 
   // const comunidades = ['Alurakut'];
   // const comunidades = comunidades[0];
   //const alteradorComunidade/setComunidades = comunidade[1];
-  const pessoasFavoritas = [
-    'texboy',     
-    'pragdave',
-    'andyhunt',
-    'peas',
-    'juunegreiros',
-    'omariosouto'
-  ]
+  const [pessoasFavoritas, setPessoasFavoritas] = React.useState([{    
+      id:'11111112',
+      title: 'texboy',
+      image: 'https://github.com/texboy.png',
+      url: "https://github.com/texboy.png",
+    },
+    {
+      id:'1145442',
+      title: 'pragdave',
+      image: 'https://github.com/pragdave.png',
+      url: "https://github.com/pragdave.png",     
+    },
+    {
+      id:'45648454',
+      title: 'andyhunt',
+      image: 'https://github.com/andyhunt.png',
+      url: "https://github.com/andyhunt.png",       
+    },
+    {
+      id:'789745454',
+      title: 'peas',
+      image: 'https://github.com/peas.png',
+      url: "https://github.com/peas.png",       
+    },
+    {
+      id:'789754',
+      title: 'juunegreiros',
+      image: 'https://github.com/juunegreiros.png',
+      url: "https://github.com/juunegreiros.png", 
+    },
+    {
+      id:'78785454',
+      title: 'omariosouto',
+      image: 'https://github.com/omariosouto.png',
+      url: "https://github.com/omariosouto.png", 
+    },    
+]);
+  
+
 
   return (
   <>
-    <AlurakutMenu />
-    <MainGrid> 
+    <AlurakutMenu githubUser={githubUser} />
+    <MainGrid>      
       <div className="profileArea" style={{ gridArea: 'profileArea'}}>
         <ProfileSideBar githubUser={githubUser}/> 
       </div>
@@ -72,15 +140,16 @@ export default function Home() {
                   id: new Date().toISOString(),
                   title: dadosDoForm.get('title'),
                   image: dadosDoForm.get('image'),
+                  url: dadosDoForm.get('communityUrl'),
               }
               const comunidadesAtualizadas = [...comunidades, comunidade]
               setComunidades(comunidadesAtualizadas);
             }}>
             <div>
               <input 
-                placeholder="Qual será sua comunidade?" 
+                placeholder="Qual será o nome da sua comunidade?" 
                 name="title" 
-                aria-label="Qual será sua comunidade?"
+                aria-label="Qual será o nome da sua comunidade?"
                 type="text"
               />
             </div>
@@ -92,7 +161,13 @@ export default function Home() {
                 type="text"
               />
             </div>
-
+            <div>
+              <input
+                placeholder="coloque a URL para acessar a comunidade"
+                name="communityUrl"
+                aria-label="coloque a URL para acessar a comunidade"
+              />
+            </div>
             <button>
               Criar comunidade
             </button>
@@ -100,41 +175,8 @@ export default function Home() {
         </Box>
       </div>
       <div className="profileRelationsArea"  style={{ gridArea: 'profileRelationsArea' }}> 
-      <ProfileRelationsBoxWrapper>
-          <h2 className="smallTitle">
-            Comunidades ({comunidades.length})
-          </h2>
-          <ul>
-            {comunidades.map((itemAtual) => {
-              return(
-                <li key={itemAtual.id}>
-                  <a href={`/users/${itemAtual.title}`}>
-                    <img src={itemAtual.image}/>
-                    <span> {itemAtual.title} </span>
-                  </a>
-                </li>
-              )          
-            })}
-          </ul>
-      </ProfileRelationsBoxWrapper>
-      <ProfileRelationsBoxWrapper>
-        <h2 className="smallTitle" >
-          Pessoas da comunidade ({pessoasFavoritas.length})
-        </h2>
-        
-        <ul>
-          {pessoasFavoritas.map((itemAtual) => {
-            return(
-              <li key={itemAtual}>
-                <a href={`/users/${itemAtual}`}>
-                  <img src={`https://github.com/${itemAtual}.png`}/>
-                  <span> {itemAtual} </span>
-                </a>
-              </li>
-            )          
-          })}
-        </ul>
-      </ProfileRelationsBoxWrapper> 
+      <CommunityBox titleText="Comunidades" stateArray={comunidades}/>
+      <CommunityBox titleText="Pessoas da comunidade" stateArray={pessoasFavoritas}/>
       </div>  
     </MainGrid>
   </>

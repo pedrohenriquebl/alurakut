@@ -13,6 +13,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: sans-serif;
     background-color: #898180;
+    background-image: url("../background.jpg");
   }
 
   h2{
@@ -22,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
   #__next {
     display: flex;
     min-height: 100vh;
-    flex-direction: column;
+    flex-direction: column;   
   }
 
   img {
