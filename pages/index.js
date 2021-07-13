@@ -9,7 +9,7 @@ import { ProfileRelationsBoxWrapper } from "../src/componentes/profileRelations"
 function ProfileSideBar (propriedades) {
   return (
     <Box as="aside">        
-      <img src={`https://github.com/${propriedades.githubUser}.png`} style={{ borderRadius: '8px'}}/>
+      <img src={`https://github.com/${propriedades.githubUser}.png`} style={{ borderRadius: '8px', border: '2px solid black'}}/>
       <hr />
       <p>
         <a className="boxLink" href={`https://github.com/${propriedades.githubUser}`}>
@@ -113,8 +113,6 @@ export default function Home() {
     },    
 ]);
   
-
-
   return (
   <>
     <AlurakutMenu githubUser={githubUser} />
