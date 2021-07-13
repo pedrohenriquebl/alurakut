@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Box = styled.div`
-  background: #FFFFFF;
+  background: #2A2322;
   border-radius: 8px;
   padding: 16px;
   /* CSS Pré-Pronto */
@@ -16,6 +16,7 @@ const Box = styled.div`
     font-size: 32px;
     font-weight: 400;
     margin-bottom: 20px;
+    color: #ffffff
   }
   .subTitle {
     font-size: 18px;
@@ -26,7 +27,7 @@ const Box = styled.div`
     margin-bottom: 20px;
     font-size: 16px;
     font-weight: 700;
-    color: #333333;
+    color: #ffffff;
     margin-bottom: 20px;
   }
   hr {
