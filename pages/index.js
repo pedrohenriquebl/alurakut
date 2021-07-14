@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from "framer-motion";
 import styled from 'styled-components'
 import MainGrid from "../src/componentes/MainGrid"
 import Box from "../src/componentes/Box"
@@ -8,6 +9,7 @@ import { ProfileRelationsBoxWrapper } from "../src/componentes/profileRelations"
 
 function ProfileSideBar (propriedades) {
   return (
+
     <Box as="aside">        
       <img src={`https://github.com/${propriedades.githubUser}.png`} style={{ borderRadius: '8px', border: '2px solid black'}}/>
       <hr />
@@ -19,7 +21,8 @@ function ProfileSideBar (propriedades) {
       <hr />
 
       <AlurakutProfileSidebarMenuDefault />
-    </Box>
+    </Box>  
+  
   )
 }
 
@@ -71,6 +74,7 @@ function CommunityBox ({ titleText, stateArray }) {
 
 
 export default function Home() {   
+  
   const githubUser = "pedrohenriquebl";  
   const [comunidades, setComunidades] = React.useState([{
     id: '45421321215456421321',
@@ -162,7 +166,24 @@ const [seguidores, setSeguidores] = React.useState([]);
 
 
   return (
+
+    
+  
   <>
+  <motion.div
+    initial={{
+      opacity: 0,
+      
+      y: -300
+    }}
+    animate={{
+      opacity: 1,      
+      y: 0
+    }}
+    transition={{
+      duration: 3
+    }}
+  >
     <AlurakutMenu githubUser={githubUser} />
     <MainGrid>      
       <div className="profileArea" style={{ gridArea: 'profileArea'}}>
@@ -241,10 +262,10 @@ const [seguidores, setSeguidores] = React.useState([]);
       <div className="profileRelationsArea"  style={{ gridArea: 'profileRelationsArea' }}>
       <ProfileRelationsBox title="Seguidores" items={seguidores}/>
       <CommunityBox titleText="Comunidades" stateArray={comunidades}/>
-      <CommunityBox titleText="Pessoas da comunidade" stateArray={pessoasFavoritas}/>
-     
+      <CommunityBox titleText="Pessoas da comunidade" stateArray={pessoasFavoritas}/>     
       </div>  
     </MainGrid>
+    </motion.div>
   </>
   )
 }
