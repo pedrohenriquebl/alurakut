@@ -6,6 +6,7 @@ import Box from "../src/componentes/Box"
 import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from "../src/lib/AlurakutCommons";
 import { ProfileRelationsBoxWrapper } from "../src/componentes/profileRelations";
 
+const token = '16173d7e71176f442dff40a8307da6';
 
 function ProfileSideBar (propriedades) {
   return (
@@ -25,7 +26,6 @@ function ProfileSideBar (propriedades) {
   
   )
 }
-
 
 function ProfileRelationsBox(propriedades){
   return(
@@ -49,18 +49,19 @@ function ProfileRelationsBox(propriedades){
   )
 }
 
-function CommunityBox ({ titleText, stateArray }) {
+function CommunityBox (propriedades) {
+  console.log(propriedades.stateArray)
   return (
     <ProfileRelationsBoxWrapper>
     <h2 className="smallTitle">
-      {titleText} ({stateArray.length})
+      {propriedades.titleText} ({propriedades.stateArray.length})
     </h2>
     <ul>
-      {stateArray.map((itemAtual) => {
+      {propriedades.stateArray.map((itemAtual) => {  
         return(
-          <li key={itemAtual.id}>
+          <li key={itemAtual}>
             <a href={`/users/${itemAtual.title}`}>
-              <img src={itemAtual.image}/>
+              <img src={itemAtual.imageUrl}/>
               <span> {itemAtual.title} </span>
             </a>
           </li>
@@ -76,70 +77,60 @@ function CommunityBox ({ titleText, stateArray }) {
 export default function Home() {   
   
   const githubUser = "pedrohenriquebl";  
-  const [comunidades, setComunidades] = React.useState([{
-    id: '45421321215456421321',
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',},
+  const [comunidades, setComunidades] = React.useState([]);
+  React.useEffect(function() {
+
+    fetch(
+      'https://graphql.datocms.com/',    
     {
-    id: '4545454542',
-    title: 'Colera do Dragão no banheiro',
-    image: 'https://i.ibb.co/y0dtb5R/coleradodragao.png',
-    },
-    {
-      id: '454454545',
-      title: 'Cachoeiras e natureza',
-      image: 'https://i.ibb.co/99sdKqz/cachoeiras.jpg',
-    },
-    {
-      id: '9898151',
-      title: 'Piano e música',
-      image: 'https://i.ibb.co/Mh6cr4x/Piano-and-piano-keyboard.jpg',
-    },
-    {
-      id: '787451',
-      title: 'Alura',
-      image: 'https://i.ibb.co/nw1cQkt/alura.jpg',  
-  }]); 
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        query: '{allCommunities {id, imageUrl, title} }'
+      }),
+    } 
+  )
+  .then(function(respostaDoServidor){
+    return respostaDoServidor.json();
+  })
+  .then(function(respostaCompleta){
+    setComunidades(respostaCompleta.data.allCommunities);
+  });
+}, [])
+   
   // const comunidades = ['Alurakut'];
   // const comunidades = comunidades[0];
   //const alteradorComunidade/setComunidades = comunidade[1];
-  const [pessoasFavoritas, setPessoasFavoritas] = React.useState([{    
-      id:'11111112',
-      title: 'texboy',
-      image: 'https://github.com/texboy.png',
-      url: "https://github.com/texboy",
-    },
-    {
-      id:'1145442',
-      title: 'pragdave',
-      image: 'https://github.com/pragdave.png',
-      url: "https://github.com/pragdave",     
-    },
-    {
-      id:'45648454',
-      title: 'andyhunt',
-      image: 'https://github.com/andyhunt.png',
-      url: "https://github.com/andyhunt",       
-    },
-    {
-      id:'789745454',
-      title: 'peas',
-      image: 'https://github.com/peas.png',
-      url: "https://github.com/peas",       
-    },
-    {
-      id:'789754',
-      title: 'juunegreiros',
-      image: 'https://github.com/juunegreiros.png',
-      url: "https://github.com/juunegreiros", 
-    },
-    {
-      id:'78785454',
-      title: 'omariosouto',
-      image: 'https://github.com/omariosouto.png',
-      url: "https://github.com/omariosouto", 
-    },    
-]);
+  const [pessoasFavoritas, setPessoasFavoritas] = React.useState([]);
+  React.useEffect(function () {    
+    
+    fetch(
+      'https://graphql.datocms.com/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: '{ allFriends {identifier, title, imageUrl, linkUrl } }'
+        }),
+      }
+    )
+    
+    .then(function(respostaDoServidor) {
+      return respostaDoServidor.json();
+    })
+    .then(function(respostaCompleta){
+      setPessoasFavoritas(respostaCompleta.data.allFriends);
+
+    });
+  }, [])
   
 //Trabalhando com o fetch (pega uma promessa de dados do servidor)
 //retornando uma promessa.
@@ -151,24 +142,20 @@ export default function Home() {
 // 0 - Pegar o array de dados do github;
 const [seguidores, setSeguidores] = React.useState([]);
 
-  React.useEffect(function () {    
-    fetch('https://api.github.com/users/pedrohenriquebl/followers')
-    .then(function (respostaDoServidor){
-      return respostaDoServidor.json();
-    })
-    .then(function(respostaCompleta){
-      setSeguidores(respostaCompleta);
-    })
-  }, [])
+React.useEffect(function () {    
+  fetch('https://api.github.com/users/pedrohenriquebl/followers')
+  .then(function (respostaDoServidor){
+    return respostaDoServidor.json();
+  })
+  .then(function(respostaCompleta){
+    setSeguidores(respostaCompleta);
+  })
+}, [])
 
 //1 - criar um box que vai ter um map, baseado nos itens do array
 // que pegamos do github;
 
-
-  return (
-
-    
-  
+  return (   
   <>
   <motion.div
     initial={{
