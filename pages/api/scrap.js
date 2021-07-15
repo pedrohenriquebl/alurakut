@@ -2,7 +2,7 @@ import { SiteClient } from 'datocms-client';
 
 export default async function recebedorDeRequests(request, response ){
 
-    if (request === 'POST'){
+    if (request.method === 'POST'){
         const TOKEN = '9b548f7e4f7e3deee24927bce1437c';
 
         const client = new SiteClient(TOKEN);

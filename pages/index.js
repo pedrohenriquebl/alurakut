@@ -310,7 +310,7 @@ React.useEffect(function () {
                 const dados = await response.json();
                 console.log(dados.registroCriado);
                 const scrap = dados.registroCriado;
-                const scrapsAtualizados = [...scraps, scrap];
+                const scrapsAtualizados = [...scrapsAtuais, scrap];
                 setScraps(scrapsAtualizados)
               })
 
