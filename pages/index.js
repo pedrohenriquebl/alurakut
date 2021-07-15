@@ -6,7 +6,7 @@ import Box from "../src/componentes/Box"
 import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from "../src/lib/AlurakutCommons";
 import { ProfileRelationsBoxWrapper } from "../src/componentes/profileRelations";
 
-const token = '16173d7e71176f442dff40a8307da6';
+
 
 function ProfileSideBar (propriedades) {
   return (
@@ -72,6 +72,25 @@ function CommunityBox (propriedades) {
   )
 }
 
+function ScrapBox (propriedades) {
+  return (
+    <Box as="main">
+      <h2 className="smallTitle">
+        {propriedades.titleText} 
+      </h2>
+      <ul>
+        {propriedades.stateArray.map((itemAtual) =>{
+          return (
+            <li key={itemAtual.title}>
+              <img src={itemAtual.imageUrl}/>
+              <span>{itemAtual.text}</span>
+            </li>
+          )
+        })}
+      </ul>
+    </Box>
+  )
+}
 
 
 export default function Home() {   
@@ -87,10 +106,10 @@ export default function Home() {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': '16173d7e71176f442dff40a8307da6',
       },
       body: JSON.stringify({
-        query: '{allCommunities {id, imageUrl, title} }'
+        query: '{allCommunities {id, imageUrl, title, creatorSlug} }'
       }),
     } 
   )
@@ -101,10 +120,44 @@ export default function Home() {
     setComunidades(respostaCompleta.data.allCommunities);
   });
 }, [])
+
+  // maneiras de fazer a promisse com sync e await, substituindo concatencao de then;
+
+  // await fetch('https://api.github.com/pedrohenriquebl/followers')
+  //.then(async function(response){
+  //  const resposta = awai response.json()
+  // console.log(resposta)
+  // console.log('pós response')
+  //})
    
   // const comunidades = ['Alurakut'];
   // const comunidades = comunidades[0];
   //const alteradorComunidade/setComunidades = comunidade[1];
+  const [scrapsAtuais, setScraps] = React.useState([]);
+  React.useEffect(function() {
+    fetch(
+      'https://graphql.datocms.com/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': '16173d7e71176f442dff40a8307da6',
+        },
+        body: JSON.stringify({
+          query: '{allScraps {title, text, imageUrl}}'
+        }),
+      }
+    )
+    .then(function(respostaDoServidor){
+      return respostaDoServidor.json();
+    })
+    .then(function (respostaCompleta){
+      setScraps(respostaCompleta.data.allScraps);
+    })
+  })
+
+
   const [pessoasFavoritas, setPessoasFavoritas] = React.useState([]);
   React.useEffect(function () {    
     
@@ -115,7 +168,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': '16173d7e71176f442dff40a8307da6',
         },
         body: JSON.stringify({
           query: '{ allFriends {identifier, title, imageUrl, linkUrl } }'
@@ -190,14 +243,27 @@ React.useEffect(function () {
               const dadosDoForm = new FormData(e.target);
               // comunidades.push('Alura Stars');
 
-              const comunidade = {
-                  id: new Date().toISOString(),
+              const comunidade = {                 
                   title: dadosDoForm.get('title'),
-                  image: dadosDoForm.get('image'),
-                  url: dadosDoForm.get('communityUrl'),
+                  imageUrl: dadosDoForm.get('image'),
+                  creatorSlug: githubUser,
               }
-              const comunidadesAtualizadas = [...comunidades, comunidade]
-              setComunidades(comunidadesAtualizadas);
+
+              fetch('/api/comunidade', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(comunidade)
+              })
+              .then(async (response) => {
+                const dados = await response.json();
+                console.log(dados.registroCriado);
+                const comunidade = dados.registroCriado;
+                const comunidadesAtualizadas = [...comunidades, comunidade];
+                setComunidades(comunidadesAtualizadas)
+              })
+
             }}>
             <div>
               <input 
@@ -215,18 +281,70 @@ React.useEffect(function () {
                 type="text"
               />
             </div>
-            <div>
-              <input
-                placeholder="coloque a URL para acessar a comunidade"
-                name="communityUrl"
-                aria-label="coloque a URL para acessar a comunidade"
-              />
-            </div>
+ 
             <button>
               Criar comunidade
             </button>
           </form>
         </Box>
+        <Box>
+            <h2 className="subTitle" style={{textAlign:'center', color:'#D82110', fontWeight:'bold', textDecorationLine: 'underline'}}>Deixe aqui seu SCRAP ;)</h2>
+            <form onSubmit={function handleCreateScrap(e){
+              e.preventDefault();
+              const dadosDoForm = new FormData(e.target);
+              
+              const scrap = {                 
+                  title: dadosDoForm.get('title'),
+                  text: dadosDoForm.get('text'),
+                  imageUrl: dadosDoForm.get('imageUrl'),                  
+              }
+
+              fetch('api/scrap', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(scrap)
+              })
+              .then(async (response) => {
+                const dados = await response.json();
+                console.log(dados.registroCriado);
+                const scrap = dados.registroCriado;
+                const scrapsAtualizados = [...scraps, scrap];
+                setScraps(scrapsAtualizados)
+              })
+
+            }}>
+            <div>
+              <input 
+                placeholder="Deixe aqui seu link github ou digite seu nome" 
+                name="title" 
+                aria-label="Qual será o seu scrap?"
+                type="text"
+              />  
+            </div>
+            <div> 
+              <input 
+                placeholder="Digite sua mensagem" 
+                name="title" 
+                aria-label="Escreva aqui sua mensagem"
+                type="text"
+              />          
+            </div>
+            <div> 
+              <input 
+                placeholder="Deixe o link da sua imagem" 
+                name="image" 
+                aria-label="Coloque aqui o link da sua imagem"
+                type="text"
+              />          
+            </div>
+            <button>
+              Enviar SCRAP
+            </button>
+          </form>
+        </Box>
+        <ScrapBox titleText="Scraps" stateArray={scrapsAtuais}/>
         <Box>
             <h2 className="subTitle" style={{textAlign:'center', fontWeight:'bold', textDecorationLine: 'underline'}}>Música do Dia</h2>
 
@@ -242,14 +360,13 @@ React.useEffect(function () {
             </button>
             <button style={{marginLeft:'380px'}}>
               Dislike 👎🏻
-            </button>
-          
+            </button>          
         </Box>
       </div>      
       <div className="profileRelationsArea"  style={{ gridArea: 'profileRelationsArea' }}>
       <ProfileRelationsBox title="Seguidores" items={seguidores}/>
       <CommunityBox titleText="Comunidades" stateArray={comunidades}/>
-      <CommunityBox titleText="Pessoas da comunidade" stateArray={pessoasFavoritas}/>     
+      <CommunityBox titleText="Pessoas da comunidade" stateArray={pessoasFavoritas}/>         
       </div>  
     </MainGrid>
     </motion.div>

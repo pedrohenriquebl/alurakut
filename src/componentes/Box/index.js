@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const Box = styled.div`
   background: #2A2322;
   border-radius: 8px;
+  overflow: auto;
   padding: 16px;
   /* CSS Pré-Pronto */
   margin-bottom: 10px;
