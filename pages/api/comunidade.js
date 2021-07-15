@@ -14,7 +14,7 @@ export default async function recebedorDeRequests(request, response) {
             // creatorSlug: "omariosouto"
         })
     
-        console.log(registroCriado);
+       
     
         response.json({
             dados: 'Algum dado qualquer',

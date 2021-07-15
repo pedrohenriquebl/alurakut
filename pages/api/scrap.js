@@ -15,7 +15,7 @@ export default async function recebedorDeRequests(request, response ){
             // creatorSlug: "pedrohenriquebl",        
         });
     
-        console.log(registroCriado);
+       
     
         response.json({
             dados: 'algum dado qualquer',

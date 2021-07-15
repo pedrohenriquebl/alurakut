@@ -22,8 +22,7 @@ function ProfileSideBar (propriedades) {
       <hr />
 
       <AlurakutProfileSidebarMenuDefault />
-    </Box>  
-  
+    </Box>    
   )
 }
 
@@ -36,7 +35,7 @@ function ProfileRelationsBox(propriedades){
     <ul>
       {propriedades.items.map((itemAtual) => {
         return(
-          <li key={itemAtual.id}>
+          <li key={itemAtual.login}>
             <a href={`/users/${itemAtual.login}`}>
               <img src={itemAtual.avatar_url}/>
               <span> {itemAtual.login} </span>
@@ -50,7 +49,7 @@ function ProfileRelationsBox(propriedades){
 }
 
 function CommunityBox (propriedades) {
-  console.log(propriedades.stateArray)
+  
   return (
     <ProfileRelationsBoxWrapper>
     <h2 className="smallTitle">
@@ -59,7 +58,7 @@ function CommunityBox (propriedades) {
     <ul>
       {propriedades.stateArray.map((itemAtual) => {  
         return(
-          <li key={itemAtual}>
+          <li key={itemAtual.imageUrl}>
             <a href={`/users/${itemAtual.title}`}>
               <img src={itemAtual.imageUrl}/>
               <span> {itemAtual.title} </span>
@@ -135,6 +134,7 @@ export default function Home() {
   //const alteradorComunidade/setComunidades = comunidade[1];
   const [scrapsAtuais, setScraps] = React.useState([]);
   React.useEffect(function() {
+   
     fetch(
       'https://graphql.datocms.com/',
       {
@@ -155,7 +155,7 @@ export default function Home() {
     .then(function (respostaCompleta){
       setScraps(respostaCompleta.data.allScraps);
     })
-  })
+  },[])
 
 
   const [pessoasFavoritas, setPessoasFavoritas] = React.useState([]);
@@ -258,7 +258,7 @@ React.useEffect(function () {
               })
               .then(async (response) => {
                 const dados = await response.json();
-                console.log(dados.registroCriado);
+                
                 const comunidade = dados.registroCriado;
                 const comunidadesAtualizadas = [...comunidades, comunidade];
                 setComunidades(comunidadesAtualizadas)
@@ -308,7 +308,7 @@ React.useEffect(function () {
               })
               .then(async (response) => {
                 const dados = await response.json();
-                console.log(dados.registroCriado);
+                
                 const scrap = dados.registroCriado;
                 const scrapsAtualizados = [...scrapsAtuais, scrap];
                 setScraps(scrapsAtualizados)
