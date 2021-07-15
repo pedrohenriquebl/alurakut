@@ -34,7 +34,7 @@ function ProfileRelationsBox(propriedades){
       {propriedades.title} ({propriedades.items.length})
     </h2>
     <ul>
-      {propriedades.items.map((itemAtual) => {
+      {/* {propriedades.items.map((itemAtual) => {
         return(
           <li key={itemAtual.id}>
             <a href={`/users/${itemAtual.login}`}>
@@ -43,21 +43,20 @@ function ProfileRelationsBox(propriedades){
             </a>
           </li>
         )          
-      })}
+      })} */}
     </ul>
    </ProfileRelationsBoxWrapper> 
   )
 }
 
 function CommunityBox (propriedades) {
-  console.log(propriedades.stateArray)
   return (
     <ProfileRelationsBoxWrapper>
     <h2 className="smallTitle">
       {propriedades.titleText} ({propriedades.stateArray.length})
     </h2>
     <ul>
-      {propriedades.stateArray.map((itemAtual) => {  
+      {/* {propriedades.stateArray.map((itemAtual) => {  
         return(
           <li key={itemAtual}>
             <a href={`/users/${itemAtual.title}`}>
@@ -66,7 +65,7 @@ function CommunityBox (propriedades) {
             </a>
           </li>
         )          
-      })}
+      })} */}
     </ul>
   </ProfileRelationsBoxWrapper>
   )
@@ -79,14 +78,14 @@ function ScrapBox (propriedades) {
         {propriedades.titleText} 
       </h2>
       <ul>
-        {propriedades.stateArray.map((itemAtual) =>{
+        {/* {propriedades.stateArray.map((itemAtual) =>{
           return (
             <li key={itemAtual.title}>
               <img src={itemAtual.imageUrl}/>
               <span>{itemAtual.text}</span>
             </li>
           )
-        })}
+        })} */}
       </ul>
     </Box>
   )
@@ -133,7 +132,7 @@ export default function Home() {
   // const comunidades = ['Alurakut'];
   // const comunidades = comunidades[0];
   //const alteradorComunidade/setComunidades = comunidade[1];
-  const [scrapsAtuais, setScraps] = React.useState([]);
+  const [scrapsAtuais, setScrapsAtuais] = React.useState([]);
   React.useEffect(function() {
     fetch(
       'https://graphql.datocms.com/',
@@ -153,7 +152,7 @@ export default function Home() {
       return respostaDoServidor.json();
     })
     .then(function (respostaCompleta){
-      setScraps(respostaCompleta.data.allScraps);
+      setScrapsAtuais(respostaCompleta.data.allScraps);
     })
   })
 
@@ -258,7 +257,6 @@ React.useEffect(function () {
               })
               .then(async (response) => {
                 const dados = await response.json();
-                console.log(dados.registroCriado);
                 const comunidade = dados.registroCriado;
                 const comunidadesAtualizadas = [...comunidades, comunidade];
                 setComunidades(comunidadesAtualizadas)
@@ -296,7 +294,7 @@ React.useEffect(function () {
               const scrap = {                 
                   title: dadosDoForm.get('title'),
                   text: dadosDoForm.get('text'),
-                  imageUrl: dadosDoForm.get('imageUrl'),                  
+                  imageUrl: dadosDoForm.get('image'),                  
               }
 
               fetch('api/scrap', {
@@ -308,10 +306,9 @@ React.useEffect(function () {
               })
               .then(async (response) => {
                 const dados = await response.json();
-                console.log(dados.registroCriado);
                 const scrap = dados.registroCriado;
-                const scrapsAtualizados = [...scraps, scrap];
-                setScraps(scrapsAtualizados)
+                const scrapsAtualizados = [...scrapsAtuais, scrap];
+                setScrapsAtuais(scrapsAtualizados)
               })
 
             }}>
@@ -326,7 +323,7 @@ React.useEffect(function () {
             <div> 
               <input 
                 placeholder="Digite sua mensagem" 
-                name="title" 
+                name="text" 
                 aria-label="Escreva aqui sua mensagem"
                 type="text"
               />          

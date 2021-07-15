@@ -4,7 +4,7 @@ export default async function recebedorDeRequests(request, response) {
     if(request.method === 'POST') {
         const TOKEN = '9b548f7e4f7e3deee24927bce1437c';
         const client = new SiteClient(TOKEN);
-        
+        console.log('test')
         // Validar os dados, antes de sair cadastrando
         const registroCriado = await client.items.create({
             itemType: "967568", // ID do Model de "Communities" criado pelo Dato
@@ -14,7 +14,6 @@ export default async function recebedorDeRequests(request, response) {
             // creatorSlug: "omariosouto"
         })
     
-        console.log(registroCriado);
     
         response.json({
             dados: 'Algum dado qualquer',

@@ -1,12 +1,12 @@
 import { SiteClient } from 'datocms-client';
 
 export default async function recebedorDeRequests(request, response ){
-
-    if (request === 'POST'){
+    if (request.method === 'POST'){
         const TOKEN = '9b548f7e4f7e3deee24927bce1437c';
-
+        
         const client = new SiteClient(TOKEN);
-    
+        console.log('test')
+
         const registroCriado = await client.items.create({
             itemType: "971913", // model ID DATOCMS
             ...request.body,
@@ -15,7 +15,7 @@ export default async function recebedorDeRequests(request, response ){
             // creatorSlug: "pedrohenriquebl",        
         });
     
-        console.log(registroCriado);
+    
     
         response.json({
             dados: 'algum dado qualquer',
