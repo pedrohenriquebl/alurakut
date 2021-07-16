@@ -38,7 +38,7 @@ export default function LoginScreen() {
                             path: '/login',
                             maxAge: 86400 * 7
                         })                    
-                        router.push('/')
+                        router.push('/login')
                     })           
                 }}>
                 <p>
