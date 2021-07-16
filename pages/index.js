@@ -379,34 +379,19 @@ React.useEffect(function () {
 
 export async function getServerSideProps(context) {
   const cookies = nookies.get(context)
-  if (!cookies.USER_TOKEN) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      }
-    }
-  }
-
   const token = cookies.USER_TOKEN;
   const { isAuthenticated } = await fetch('https://alurakut.vercel.app/api/auth', {
     headers: {
-      Authorization: token
-    }
-  }).then((resposta) => resposta.json())
-
-  if (isAuthenticated) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
+        Authorization: token
       }
-    }
-  }
+  })
+  .then((resposta) => resposta.json())
+
+
   const { githubUser } = jwt.decode(token);
   return {
     props: {
       githubUser
-    },
+    }, // will be passed to the page component as props
   }
 }
