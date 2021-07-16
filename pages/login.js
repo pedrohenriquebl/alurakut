@@ -35,10 +35,10 @@ export default function LoginScreen() {
                         const dadosDaresposta = await respostaDoServer.json()  
                         const token = dadosDaresposta.token;
                         nookies.set(null, 'USER_TOKEN', token, {
-                            path: '/login',
+                            path: '/',
                             maxAge: 86400 * 7
                         })                    
-                        router.push('/login')
+                        router.push('/')
                     })           
                 }}>
                 <p>
